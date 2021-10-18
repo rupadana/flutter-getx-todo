@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:openaccess/components/SkeletonLoading.dart';
+import 'package:openaccess/models/TodoModel.dart';
 import 'package:openaccess/pages/todo/create/todo_create_page.dart';
 import './todo_controller.dart';
 
@@ -15,17 +16,17 @@ class TodoPage extends GetView<TodoController> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: 20, right: 20, left: 20),
-          child: Obx(
-            () => Column(
-              children: controller.todoIsFetching.value
-                  ? skeleton
-                  : controller.todos.value
-                      .map((e) => todoItem(title: "${e.title}"))
-                      .toList(),
-            ),
-          ),
-        ),
+            padding: EdgeInsets.only(top: 20, right: 20, left: 20),
+            child: GetBuilder<TodoController>(
+              id: "list-todo",
+              builder: (controller) => Column(
+                children: controller.todoIsFetching.value
+                    ? skeleton
+                    : controller.todos.value
+                        .map((e) => todoItem(title: "${e.title}", model: e))
+                        .toList(),
+              ),
+            )),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -36,9 +37,7 @@ class TodoPage extends GetView<TodoController> {
     );
   }
 
-  Widget todoItem({
-    required String title,
-  }) {
+  Widget todoItem({required String title, required TodoModel model}) {
     return Row(
       children: [
         Flexible(
@@ -56,7 +55,7 @@ class TodoPage extends GetView<TodoController> {
             children: [
               IconButton(
                 onPressed: () {
-                  print("Edit");
+                  Get.toNamed(TodoCreatePage.route, arguments: {"todo": model});
                 },
                 icon: Icon(
                   Icons.edit,
@@ -65,7 +64,31 @@ class TodoPage extends GetView<TodoController> {
               ),
               IconButton(
                 onPressed: () {
-                  print("Remove");
+                  Get.defaultDialog(
+                      title: "Konfirmasi",
+                      middleText: "Yakin akan menghapus todo ${model.title}?",
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            controller.todos.value.removeWhere(
+                                (todo) => todo.title == model.title);
+                            Get.back();
+                            controller.update(['list-todo']);
+                          },
+                          child: Text("Ya"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text(
+                            "Tidak",
+                            style: TextStyle(
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                        ),
+                      ]);
                 },
                 icon: Icon(
                   Icons.delete,

@@ -13,6 +13,7 @@ class IndexPage extends GetView<IndexController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-        () => controller.isloadWelcomePage.isTrue ? SplashPage() : TodoPage());
+      () => controller.isloadWelcomePage.isTrue ? SplashPage() : TodoPage(),
+    );
   }
 }

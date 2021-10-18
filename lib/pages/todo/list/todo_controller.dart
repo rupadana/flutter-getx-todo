@@ -14,8 +14,10 @@ class TodoController extends GetxController {
   }
 
   getTodoList() async {
+    print("fetching");
     todoIsFetching.value = true;
     Response response = await ApiController().getTodo();
+    print(response.body);
     if (response.statusCode == 200) {
       todoIsFetching.value = false;
       return todos.value = ((response.body) as List)
