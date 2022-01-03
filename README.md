@@ -4,7 +4,7 @@
 
 Project ini dibangun menggunakan flutter
 
-Ada beberapa hal yang perlu dipelajari untuk melanjutkan aplikasi OpenAccess Mobile :
+Ada beberapa hal yang perlu dipelajari untuk melanjutkan aplikasi ini :
 
 - [Lab: Buat aplikasi pertamamu](https://flutter.dev/docs/get-started/codelab)
 - [Cookbook: Sample flutter yang berguna](https://flutter.dev/docs/cookbook)
